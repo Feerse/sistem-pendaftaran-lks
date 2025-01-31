@@ -26,7 +26,7 @@ class Siswa extends Model
      */
     public function sekolah(): BelongsTo
     {
-        return $this->belongsTo(Sekolah::class);
+        return $this->belongsTo(Sekolah::class, 'id_sekolah');
     }
 
     /**

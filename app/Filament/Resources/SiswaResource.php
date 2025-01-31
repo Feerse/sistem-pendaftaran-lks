@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BidangMataLombaResource\Pages;
-use App\Filament\Resources\BidangMataLombaResource\RelationManagers;
-use App\Models\BidangMataLomba;
+use App\Filament\Resources\SiswaResource\Pages;
+use App\Filament\Resources\SiswaResource\RelationManagers;
+use App\Models\Siswa;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,19 +13,33 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BidangMataLombaResource extends Resource
+class SiswaResource extends Resource
 {
-    protected static ?string $model = BidangMataLomba::class;
+    protected static ?string $model = Siswa::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $slug = 'bidang-mata-lomba';
+    protected static ?string $slug = 'siswa';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_bidang_mata_lomba')
+                Forms\Components\TextInput::make('nisn')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Select::make('id_sekolah')
+                    ->label('Sekolah')
+                    ->relationship('sekolah', 'nama_sekolah')
+                    ->required(),
+                Forms\Components\TextInput::make('program_keahlian')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('nomor_hp')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -35,7 +49,15 @@ class BidangMataLombaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama_bidang_mata_lomba')
+                Tables\Columns\TextColumn::make('nisn')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('sekolah.nama_sekolah')
+                    ->label('Sekolah'),
+                Tables\Columns\TextColumn::make('program_keahlian')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nomor_hp')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -69,9 +91,9 @@ class BidangMataLombaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBidangMataLombas::route('/'),
-            'create' => Pages\CreateBidangMataLomba::route('/create'),
-            'edit' => Pages\EditBidangMataLomba::route('/{record}/edit'),
+            'index' => Pages\ListSiswas::route('/'),
+            'create' => Pages\CreateSiswa::route('/create'),
+            'edit' => Pages\EditSiswa::route('/{record}/edit'),
         ];
     }
 }
