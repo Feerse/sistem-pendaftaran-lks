@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SekolahResource\Pages;
-use App\Filament\Resources\SekolahResource\RelationManagers;
-use App\Models\Sekolah;
+use App\Filament\Resources\GuruResource\Pages;
+use App\Filament\Resources\GuruResource\RelationManagers;
+use App\Models\Guru;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,33 +13,31 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SekolahResource extends Resource
+class GuruResource extends Resource
 {
-    protected static ?string $model = Sekolah::class;
+    protected static ?string $model = Guru::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-library';
+    protected static ?string $navigationIcon = 'heroicon-s-users';
 
-    protected static ?string $slug = 'sekolah';
+    protected static ?string $slug = 'guru';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('npsn')
+                Forms\Components\TextInput::make('nama_guru')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('nama_sekolah')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('id_sekolah')
+                    ->label('Sekolah')
+                    ->relationship('sekolah', 'nama_sekolah')
+                    ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
+                Forms\Components\TextInput::make('nomor_hp')
                     ->required()
-                    ->visibleOn('create')
                     ->maxLength(255),
             ]);
     }
@@ -48,15 +46,14 @@ class SekolahResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('npsn')
+                Tables\Columns\TextColumn::make('nama_guru')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nama_sekolah')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('sekolah.nama_sekolah')
+                    ->label('Sekolah'),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('nomor_hp')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -89,9 +86,9 @@ class SekolahResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSekolahs::route('/'),
-            'create' => Pages\CreateSekolah::route('/create'),
-            'edit' => Pages\EditSekolah::route('/{record}/edit'),
+            'index' => Pages\ListGurus::route('/'),
+            'create' => Pages\CreateGuru::route('/create'),
+            'edit' => Pages\EditGuru::route('/{record}/edit'),
         ];
     }
 }

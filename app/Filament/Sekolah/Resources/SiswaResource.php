@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Sekolah\Resources;
 
-use App\Filament\Resources\SekolahResource\Pages;
-use App\Filament\Resources\SekolahResource\RelationManagers;
-use App\Models\Sekolah;
+use App\Filament\Sekolah\Resources\SiswaResource\Pages;
+use App\Filament\Sekolah\Resources\SiswaResource\RelationManagers;
+use App\Models\Siswa;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,33 +13,31 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SekolahResource extends Resource
+class SiswaResource extends Resource
 {
-    protected static ?string $model = Sekolah::class;
+    protected static ?string $model = Siswa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-library';
-
-    protected static ?string $slug = 'sekolah';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('npsn')
+                Forms\Components\TextInput::make('nisn')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('nama_sekolah')
+                Forms\Components\TextInput::make('id_sekolah')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('program_keahlian')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
+                Forms\Components\TextInput::make('nomor_hp')
                     ->required()
-                    ->visibleOn('create')
                     ->maxLength(255),
             ]);
     }
@@ -48,15 +46,17 @@ class SekolahResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('npsn')
+                Tables\Columns\TextColumn::make('nisn')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nama_sekolah')
+                Tables\Columns\TextColumn::make('sekolah.nama_sekolah')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('program_keahlian')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('nomor_hp')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -89,9 +89,9 @@ class SekolahResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSekolahs::route('/'),
-            'create' => Pages\CreateSekolah::route('/create'),
-            'edit' => Pages\EditSekolah::route('/{record}/edit'),
+            'index' => Pages\ListSiswas::route('/'),
+            'create' => Pages\CreateSiswa::route('/create'),
+            'edit' => Pages\EditSiswa::route('/{record}/edit'),
         ];
     }
 }

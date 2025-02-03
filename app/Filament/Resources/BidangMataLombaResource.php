@@ -17,7 +17,7 @@ class BidangMataLombaResource extends Resource
 {
     protected static ?string $model = BidangMataLomba::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-trophy';
 
     protected static ?string $slug = 'bidang-mata-lomba';
 
