@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\Models\Sekolah;
 use App\Models\DaftarLomba;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Guru extends Model
 {
+    use HasFactory;
+
     protected $table = 'guru';
 
     protected $fillable = [

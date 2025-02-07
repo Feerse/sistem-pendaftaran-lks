@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('siswa', function (Blueprint $table) {
             $table->id();
             $table->string('nisn')->unique();
+            $table->string('nama_siswa');
             $table->unsignedBigInteger('id_sekolah');
             $table->foreign('id_sekolah')->references('id')->on('sekolah');
             $table->string('program_keahlian');

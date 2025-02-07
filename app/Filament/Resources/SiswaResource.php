@@ -28,6 +28,9 @@ class SiswaResource extends Resource
                 Forms\Components\TextInput::make('nisn')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('nama_siswa')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\Select::make('id_sekolah')
                     ->label('Sekolah')
                     ->relationship('sekolah', 'nama_sekolah')
@@ -50,6 +53,8 @@ class SiswaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nisn')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nama_siswa')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sekolah.nama_sekolah')
                     ->label('Sekolah'),
