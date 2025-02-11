@@ -8,48 +8,51 @@ use App\Models\Sekolah;
 use App\Models\BidangMataLomba;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DaftarLomba extends Model
 {
     protected $table = 'daftar_lomba';
 
+    protected $fillable = ['id_sekolah', 'id_bidang_mata_lomba', 'id_siswa', 'id_guru'];
+
     /**
-     * Get all of the sekolah for the DaftarLomba
+     * Get the sekolah that owns the DaftarLomba
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function sekolah(): HasMany
+    public function sekolah(): BelongsTo
     {
-        return $this->hasMany(Sekolah::class);
+        return $this->belongsTo(Sekolah::class, 'id_sekolah');
     }
 
     /**
-     * Get all of the bidangMataLomba for the DaftarLomba
+     * Get the bidangMataLomba that owns the DaftarLomba
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function bidangMataLomba(): HasMany
+    public function bidang_mata_lomba()
     {
-        return $this->hasMany(BidangMataLomba::class);
+        return $this->belongsTo(BidangMataLomba::class, 'id_bidang_mata_lomba');
     }
 
     /**
-     * Get all of the siswa for the DaftarLomba
+     * Get the siswa that owns the DaftarLomba
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function siswa(): HasMany
+    public function siswa()
     {
-        return $this->hasMany(Siswa::class);
+        return $this->belongsTo(Siswa::class, 'id_siswa');
     }
 
     /**
-     * Get all of the guru for the DaftarLomba
+     * Get the guru that owns the DaftarLomba
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function guru(): HasMany
+    public function guru()
     {
-        return $this->hasMany(Guru::class);
+        return $this->belongsTo(Guru::class, 'id_guru');
     }
 }

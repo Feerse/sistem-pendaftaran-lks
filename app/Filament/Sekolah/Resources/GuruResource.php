@@ -3,34 +3,30 @@
 namespace App\Filament\Sekolah\Resources;
 
 use Filament\Forms;
+use App\Models\Guru;
 use Filament\Tables;
-use App\Models\Siswa;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Sekolah\Resources\SiswaResource\Pages;
-use App\Filament\Sekolah\Resources\SiswaResource\RelationManagers;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Filament\Sekolah\Resources\GuruResource\Pages;
+use App\Filament\Sekolah\Resources\GuruResource\RelationManagers;
 
-class SiswaResource extends Resource
+class GuruResource extends Resource
 {
-    protected static ?string $model = Siswa::class;
+    protected static ?string $model = Guru::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-user-group';
+    protected static ?string $navigationIcon = 'heroicon-s-users';
 
-    protected static ?string $slug = 'siswa';
+    protected static ?string $slug = 'guru';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nisn')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('nama_siswa')
+                Forms\Components\TextInput::make('nama_guru')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('id_sekolah')
@@ -41,9 +37,6 @@ class SiswaResource extends Resource
                     ->default(Auth::user()->id)
                     ->selectablePlaceholder(false)
                     ->required(),
-                Forms\Components\TextInput::make('program_keahlian')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
@@ -58,15 +51,11 @@ class SiswaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nisn')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('nama_siswa')
+                Tables\Columns\TextColumn::make('nama_guru')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sekolah.nama_sekolah')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('program_keahlian')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nomor_hp')
@@ -103,9 +92,9 @@ class SiswaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSiswas::route('/'),
-            'create' => Pages\CreateSiswa::route('/create'),
-            'edit' => Pages\EditSiswa::route('/{record}/edit'),
+            'index' => Pages\ListGurus::route('/'),
+            'create' => Pages\CreateGuru::route('/create'),
+            'edit' => Pages\EditGuru::route('/{record}/edit'),
         ];
     }
 

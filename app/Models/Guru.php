@@ -32,12 +32,12 @@ class Guru extends Model
     }
 
     /**
-     * Get the daftarLomba that owns the Guru
+     * Get all of the daftarLomba for the BidangMataLomba
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function daftarLomba(): BelongsTo
+    public function daftarLomba(): HasMany
     {
-        return $this->belongsTo(DaftarLomba::class);
+        return $this->hasMany(DaftarLomba::class);
     }
 }

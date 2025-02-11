@@ -4,35 +4,28 @@ namespace App\Filament\Sekolah\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Siswa;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\DaftarLomba;
 use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Sekolah\Resources\SiswaResource\Pages;
-use App\Filament\Sekolah\Resources\SiswaResource\RelationManagers;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Filament\Sekolah\Resources\DaftarLombaResource\Pages;
+use App\Filament\Sekolah\Resources\DaftarLombaResource\RelationManagers;
 
-class SiswaResource extends Resource
+class DaftarLombaResource extends Resource
 {
-    protected static ?string $model = Siswa::class;
+    protected static ?string $model = DaftarLomba::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $slug = 'siswa';
+    protected static ?string $slug = 'daftar-lomba';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nisn')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('nama_siswa')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\Select::make('id_sekolah')
                     ->label('Sekolah')
                     ->options([
@@ -41,16 +34,24 @@ class SiswaResource extends Resource
                     ->default(Auth::user()->id)
                     ->selectablePlaceholder(false)
                     ->required(),
-                Forms\Components\TextInput::make('program_keahlian')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('nomor_hp')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('id_bidang_mata_lomba')
+                    ->label('Bidang Mata Lomba')
+                    ->relationship('bidang_mata_lomba', 'nama_bidang_mata_lomba')
+                    ->required(),
+                Forms\Components\Select::make('id_siswa')
+                    ->label('Siswa')
+                    ->options(function () {
+                        return \App\Models\Siswa::where('id_sekolah', Auth::user()->id)
+                            ->pluck('nama_siswa', 'id');
+                    })
+                    ->required(),
+                Forms\Components\Select::make('id_guru')
+                    ->label('Guru')
+                    ->options(function () {
+                        return \App\Models\Guru::where('id_sekolah', Auth::user()->id)
+                            ->pluck('nama_guru', 'id');
+                    })
+                    ->required(),
             ]);
     }
 
@@ -58,19 +59,17 @@ class SiswaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nisn')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('nama_siswa')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('sekolah.nama_sekolah')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('bidang_mata_lomba.nama_bidang_mata_lomba')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('program_keahlian')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('nomor_hp')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('siswa.nama_siswa')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('guru.nama_guru')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -103,9 +102,9 @@ class SiswaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSiswas::route('/'),
-            'create' => Pages\CreateSiswa::route('/create'),
-            'edit' => Pages\EditSiswa::route('/{record}/edit'),
+            'index' => Pages\ListDaftarLombas::route('/'),
+            'create' => Pages\CreateDaftarLomba::route('/create'),
+            'edit' => Pages\EditDaftarLomba::route('/{record}/edit'),
         ];
     }
 
